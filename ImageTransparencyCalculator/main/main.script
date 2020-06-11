@@ -1,0 +1,19 @@
+local calc_images = require "main.calc_images"
+
+-- The generated file will become smaller, but the accuracy will also less.
+-- 1 - no compression. 2 - accuracy less than half, file size less than half
+local compression = 2
+
+function init(self)
+	 msg.post(".", "acquire_input_focus")
+	 msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
+end
+
+function on_input(self, action_id, action)
+    if action.released and action_id == hash("touch") then
+        calc_images.handle(compression)
+    end
+    -- if action.released and action_id == hash("touch") then
+    --     print("Released on:", action.x, action.y)
+    -- end
+end
