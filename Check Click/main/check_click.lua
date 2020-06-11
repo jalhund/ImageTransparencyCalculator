@@ -38,33 +38,27 @@ local function check_transparency(game_object, x, y)
  	x = math.floor(x + size.x * 0.5) + 1
 	y = math.floor(y + size.y * 0.5) + 1
 	local i = math.floor((size.y-y)/compression)*math.floor(size.x/compression) + math.floor(x/compression + 0.5)
-	print("Now i is:", i, math.floor(x/compression + 0.5), math.floor((size.y-y)/compression))
 
 	return data[game_object][i] == 255
 end
 
 function M.init(init_list)
 	for k, v in pairs(init_list) do
-		local file = io.open("generated_data/"..v..".data", "rb")
-  		if file then
-  			data[v] = {}
-  			data_compression[v] = file:read("*number")
-  			while true do
-  				local val = file:read("*number")
- 		 		if val == nil then
- 		 			break
- 		 		end
-  				table.insert(data[v], val)
+		local loaded_data = sys.load_resource("/generated_data/"..v..".data")
+		local is_compression = true
+  		for val in string.gmatch(loaded_data, "%S+") do
+			if is_compression then
+				data[v] = {}
+				data_compression[v] = tonumber(val)
+				is_compression = false
+			else
+				table.insert(data[v], tonumber(val))
 			end
-  		else
-  			print("File not opened: ", v)
-  		end
+		end
 	end
-	pprint("data:", data)
 end
 
 function M.check(game_object, x, y)
-	print("check: ", x, y)
 	if pick_sprite(game_object, x, y) and check_transparency(game_object, x, y) then
 		return true
 	else
