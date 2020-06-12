@@ -24,7 +24,7 @@ local function calc(image_id, compression)
   	stream = buffer.get_stream(generation_buffer, hash("byte"))
   	local text_file = compression.." "
     for i = 1, width/compression*height/compression do
-    	print(type(stream[i]), stream[i])
+    	--print(type(stream[i]), stream[i])
      	text_file = text_file..stream[i].." "
     end
     text_file = zlib.deflate(text_file)
