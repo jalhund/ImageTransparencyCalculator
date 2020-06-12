@@ -1,5 +1,6 @@
 [project]
 title = Check Click
+custom_resources = /generated_data/
 
 [bootstrap]
 main_collection = /main/main.collectionc

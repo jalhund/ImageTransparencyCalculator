@@ -45,15 +45,20 @@ end
 function M.init(init_list)
 	for k, v in pairs(init_list) do
 		local loaded_data = sys.load_resource("/generated_data/"..v..".data")
-		local is_compression = true
-  		for val in string.gmatch(loaded_data, "%S+") do
-			if is_compression then
-				data[v] = {}
-				data_compression[v] = tonumber(val)
-				is_compression = false
-			else
-				table.insert(data[v], tonumber(val))
+		if loaded_data then
+			loaded_data = zlib.inflate(loaded_data)
+			local is_compression = true
+  			for val in string.gmatch(loaded_data, "%S+") do
+				if is_compression then
+					data[v] = {}
+					data_compression[v] = tonumber(val)
+					is_compression = false
+				else
+					table.insert(data[v], tonumber(val))
+				end
 			end
+		else
+			print("Error data not loaded:" , v)
 		end
 	end
 end
