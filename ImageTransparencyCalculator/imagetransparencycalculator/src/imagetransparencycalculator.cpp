@@ -169,7 +169,7 @@ static int resize(lua_State* L)
                             sum += copied_bytes[y*width + x] * yportion * xportion;
                         }
                     }
-                    out_bytes[f*width/compression + g] = (sum > threshold) ? 255 : 0;
+                    out_bytes[f*width/compression + g] = (sum > threshold) ? 1 : 0;
                 }
             }
             lua_buffer->m_Buffer = buffer;

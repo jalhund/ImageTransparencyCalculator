@@ -43,24 +43,40 @@ local function check_transparency(game_object, x, y)
 end
 
 function M.init(init_list)
+	local s_t = socket.gettime()
+
+	local string_byte = string.byte
+	local string_gmatch = string.gmatch
+	local sys_load_resource = sys.load_resource
+	local zlib_inflate = zlib.inflate
+	local pairs = pairs
+
+	local str_begin = "/generated_data/"
+
 	for k, v in pairs(init_list) do
-		local loaded_data = sys.load_resource("/generated_data/"..v..".data")
+		local loaded_data = sys_load_resource(str_begin..v..".data")
 		if loaded_data then
-			loaded_data = zlib.inflate(loaded_data)
+
+			loaded_data = zlib_inflate(loaded_data)
+
 			local is_compression = true
-  			for val in string.gmatch(loaded_data, "%S+") do
+			data[v] = {}
+			local i = 0
+			for val in string_gmatch(loaded_data, "%d+") do
 				if is_compression then
-					data[v] = {}
-					data_compression[v] = tonumber(val)
+					data_compression[v] = string_byte(val) - 48
 					is_compression = false
 				else
-					table.insert(data[v], tonumber(val))
+					i = i + 1
+					data[v][i] = val == "0" and 0 or 255
 				end
 			end
 		else
 			print("Error data not loaded:" , v)
 		end
 	end
+
+	print("Finished total load: ", socket.gettime() - s_t)
 end
 
 function M.check(game_object, x, y)
