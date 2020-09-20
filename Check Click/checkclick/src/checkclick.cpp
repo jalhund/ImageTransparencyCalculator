@@ -21,6 +21,11 @@ struct ImageList {
 
 static int clear(lua_State* L)
 {
+	for(int i = 0;i < imageList.imageCount;++i)
+	{
+		delete[] imageList.imageData[i].id;
+		delete[] imageList.imageData[i].data;
+	}
     imageList.imageCount = 0;
     imageList.imageData.SetSize(0);
     imageList.imageData.SetCapacity(MAX_IMAGE_COUNT);
