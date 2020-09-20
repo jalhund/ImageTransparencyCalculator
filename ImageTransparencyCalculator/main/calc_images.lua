@@ -25,7 +25,7 @@ local function calc(image_id, compression)
   	local text_file = compression.." "
     for i = 1, width/compression*height/compression do
     	--print(type(stream[i]), stream[i])
-     	text_file = text_file..stream[i].." "
+     	text_file = text_file..stream[i]
     end
     text_file = zlib.deflate(text_file)
     file:write(text_file)

@@ -1,6 +1,5 @@
 local M = {}
 
-local data = {}
 local data_compression = {}
 
 --Modified: https://github.com/dapetcu21/crit/blob/master/crit/pick.lua
@@ -39,7 +38,7 @@ local function check_transparency(game_object, x, y)
 	y = math.floor(y + size.y * 0.5) + 1
 	local i = math.floor((size.y-y)/compression)*math.floor(size.x/compression) + math.floor(x/compression + 0.5)
 
-	return data[game_object][i] == 255
+	return checkclick.checkaplha(game_object, i)
 end
 
 function M.init(init_list)
@@ -53,24 +52,15 @@ function M.init(init_list)
 
 	local str_begin = "/generated_data/"
 
+	checkclick.clear()
+
 	for k, v in pairs(init_list) do
 		local loaded_data = sys_load_resource(str_begin..v..".data")
 		if loaded_data then
 
 			loaded_data = zlib_inflate(loaded_data)
 
-			local is_compression = true
-			data[v] = {}
-			local i = 0
-			for val in string_gmatch(loaded_data, "%d+") do
-				if is_compression then
-					data_compression[v] = string_byte(val) - 48
-					is_compression = false
-				else
-					i = i + 1
-					data[v][i] = val == "0" and 0 or 255
-				end
-			end
+			data_compression[v] = checkclick.init(v, loaded_data)
 		else
 			print("Error data not loaded:" , v)
 		end

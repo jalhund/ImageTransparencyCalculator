@@ -13,6 +13,8 @@ function init(self)
 
 end
 
+-- Because the extension does not have time to initialize
+
 function on_input(self, action_id, action)
 	if action_id == hash("touch") and action.pressed then
 		if check_click.check("london", action.x, action.y) then
