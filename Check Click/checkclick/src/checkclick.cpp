@@ -68,7 +68,10 @@ static int checkaplha(lua_State* L)
     for (int i = 0; i < imageList.imageData.Size(); ++i)
         if(!strcmp(imageList.imageData[i].id, id))
             image_n = i;
-    lua_pushboolean(L, imageList.imageData[image_n].data[i]);
+    if(i >= 0)
+        lua_pushboolean(L, imageList.imageData[image_n].data[i]);
+    else
+        lua_pushboolean(L, 0);
     return 1;
 }
 
