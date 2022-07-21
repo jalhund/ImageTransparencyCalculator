@@ -2,7 +2,7 @@ local calc_images = require "main.calc_images"
 
 -- The generated file will become smaller, but the accuracy will also less.
 -- 1 - no compression. 2 - accuracy less than half, file size less than half
-local compression = 2
+local compression = 1
 
 function init(self)
 	 msg.post(".", "acquire_input_focus")
